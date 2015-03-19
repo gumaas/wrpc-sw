@@ -114,12 +114,18 @@ uint8_t mi2c_devprobe(uint8_t i2cif, uint8_t i2c_addr)
 	return ret;
 }
 
-uint8_t mi2c_switchmux(uint8_t i2cif )
+
+
+
+uint8_t mi2c_switchmux(uint8_t i2cif, uint8_t channel )
 {
 
 	mprintf("Switching i2c mux\n");
 
 	uint8_t i,ret;
+
+	// enable channel selection
+	channel |= ( 1 << 3 );
 
 	// i2c bus could be used by other device
 	// in case of lack of ack i would like to take few retries
@@ -127,13 +133,13 @@ uint8_t mi2c_switchmux(uint8_t i2cif )
 	for ( i=0; i<8; i++ ){
 		mi2c_start(i2cif);
 		ret = !mi2c_put_byte(i2cif, 0xE0 );
-		// it that failed second byte doesnt make sens
+		// it that failed second byte doesn't make sense;
 		if( !ret ){
 			mi2c_stop(i2cif);
 			continue;
 		}
 
-		ret = !mi2c_put_byte(i2cif, 0x8 );
+		ret = !mi2c_put_byte(i2cif, channel );
 		mi2c_stop(i2cif);
 		if ( ret )
 			break;
@@ -142,7 +148,7 @@ uint8_t mi2c_switchmux(uint8_t i2cif )
 	if( !ret )
 		mprintf("FAILED\n");
 
-	return i;
+	return ret;
 
 }
 

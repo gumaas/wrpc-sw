@@ -63,12 +63,12 @@ static void wrc_initialize()
 	/*initialize I2C bus*/
 	mi2c_init(WRPC_FMC_I2C);
 #ifdef CONFIG_AFCK
-//	AFCK board has I2C switch that has to be set to correct FMC source
-	mi2c_switchmux(WRPC_FMC_I2C);
-#endif
+	storage_init_afck( WRPC_FMC_I2C );
+
+#else
 	/*init storage (Flash / W1 EEPROM / I2C EEPROM*/
 	storage_init(WRPC_FMC_I2C, FMC_EEPROM_ADR);
-
+#endif
 	mac_addr[0] = 0x08;	//
 	mac_addr[1] = 0x00;	// CERN OUI
 	mac_addr[2] = 0x30;	//

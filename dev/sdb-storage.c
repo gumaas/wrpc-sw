@@ -284,6 +284,23 @@ found_exit:
 	return;
 }
 
+//	AFCK board has I2C switch that has to be set to correct FMC source
+// AFCK also has 2 FMC cources
+// we check with one contain eeprom with correct file system
+uint8_t storage_init_afck(uint8_t i2cif ){
+
+	uint8_t fmc=0;
+
+	for( fmc = 0; fmc<2; fmc++ ){
+		if( mi2c_switchmux(i2cif, fmc) )
+			storage_init(i2cif, FMC_EEPROM_ADR);
+		if( has_eeprom )
+			break;
+	}
+
+}
+
+
 /*
  * Reading/writing the MAC address used to be part of dev/onewire.c,
  * but is not onewire-specific.  What is w1-specific is the default
