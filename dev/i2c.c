@@ -114,6 +114,38 @@ uint8_t mi2c_devprobe(uint8_t i2cif, uint8_t i2c_addr)
 	return ret;
 }
 
+uint8_t mi2c_switchmux(uint8_t i2cif )
+{
+
+	mprintf("Switching i2c mux\n");
+
+	uint8_t i,ret;
+
+	// i2c bus could be used by other device
+	// in case of lack of ack i would like to take few retries
+	// to make sure that lack of ack is caused by lack of i2c switch, not by occupied bus
+	for ( i=0; i<8; i++ ){
+		mi2c_start(i2cif);
+		ret = !mi2c_put_byte(i2cif, 0xE0 );
+		// it that failed second byte doesnt make sens
+		if( !ret ){
+			mi2c_stop(i2cif);
+			continue;
+		}
+
+		ret = !mi2c_put_byte(i2cif, 0x8 );
+		mi2c_stop(i2cif);
+		if ( ret )
+			break;
+	}
+
+	if( !ret )
+		mprintf("FAILED\n");
+
+	return i;
+
+}
+
 //void mi2c_scan(uint8_t i2cif)
 //{
 //    int i;

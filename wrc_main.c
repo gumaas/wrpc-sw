@@ -62,6 +62,10 @@ static void wrc_initialize()
 	flash_init();
 	/*initialize I2C bus*/
 	mi2c_init(WRPC_FMC_I2C);
+#ifdef CONFIG_AFCK
+//	AFCK board has I2C switch that has to be set to correct FMC source
+	mi2c_switchmux(WRPC_FMC_I2C);
+#endif
 	/*init storage (Flash / W1 EEPROM / I2C EEPROM*/
 	storage_init(WRPC_FMC_I2C, FMC_EEPROM_ADR);
 

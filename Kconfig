@@ -11,6 +11,7 @@ config WR_NODE
 	bool
 	default !WR_SWITCH
 
+
 # most options with no prompt here are prompted-for in the "advanced" section
 
 config PRINT_BUFSIZE
@@ -44,6 +45,10 @@ config UART
 config W1
 	boolean
 	default y
+
+config AFCK
+	bool "Use AFCK board"
+	default n
 
 # The other ones can be set by non-developers
 
