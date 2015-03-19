@@ -96,7 +96,7 @@ int halexp_get_port_state(hexp_port_state_t *state, const char *port_name)
   state->is_locked     = spll_check_lock(0);
   state->lock_priority = 0;
   spll_get_phase_shift(0, NULL, (int32_t *)&state->phase_setpoint);
-  state->clock_period  = 8000;
+  state->clock_period  = REF_CLOCK_PERIOD_PS;
   state->t2_phase_transition = cal_phase_transition;
   state->t4_phase_transition = cal_phase_transition;
   get_mac_addr(state->hw_addr);
